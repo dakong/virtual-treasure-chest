@@ -1,0 +1,5 @@
+# python
+/env
+/virtual_treasure_chest_env
+*.pyo
+*.pyc
