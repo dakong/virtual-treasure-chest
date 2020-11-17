@@ -1,6 +1,8 @@
 alembic==1.4.3
 astroid==2.4.2
 autopep8==1.5.4
+bcrypt==3.2.0
+cffi==1.14.3
 click==7.1.2
 Flask==1.1.2
 Flask-Admin==1.5.7
@@ -15,6 +17,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 pkg-resources==0.0.0
 pycodestyle==2.6.0
+pycparser==2.20
 pylint==2.6.0
 pylint-flask==0.6
 pylint-plugin-utils==0.6

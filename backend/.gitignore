@@ -4,3 +4,4 @@
 *.pyo
 *.pyc
 *.db
+config.py
