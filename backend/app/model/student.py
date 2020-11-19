@@ -13,3 +13,6 @@ class Student(db.Model):
 
     def fullname(self):
         return self.first_name + ' ' + self.last_name
+
+    def __repr__(self):
+        return self.fullname()

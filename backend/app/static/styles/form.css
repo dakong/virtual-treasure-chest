@@ -1,0 +1,20 @@
+body {
+  font-size: 14px;
+  font-family: "Roboto";
+}
+
+.main {
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+}
+
+.form {
+  width: 100%;
+  margin-top: 16px;
+  box-sizing: border-box;
+  padding: 16px;
+  background-color: #f6f8fa;
+  border: solid 1px #eaecef;
+  border-radius: 5px;
+}
