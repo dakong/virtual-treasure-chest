@@ -1,6 +1,6 @@
 import bcrypt
 from flask import current_app as app, request, session
-from app import db
+from app.database import db
 
 from app.utils.auth import login_required
 from app.utils.response_generator import generateSuccessResponse, generateFailResponse, generateErrorResponse

@@ -3,7 +3,7 @@ import os.path as op
 from sqlalchemy.event import listens_for
 from flask_admin import form
 
-from app import db
+from app.database import db
 from app import file_path
 
 

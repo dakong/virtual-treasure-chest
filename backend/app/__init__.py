@@ -1,14 +1,12 @@
 import os
 import os.path as op
 from flask import Flask, url_for
-from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from flask_migrate import Migrate
 
+from app.database import db
 
-# Create global db object and global file_path for other modules to access
-db = SQLAlchemy()
 # Where we will store images for treasure_items
 file_path = op.join(op.dirname(__file__), 'static', 'images', 'treasure_items')
 

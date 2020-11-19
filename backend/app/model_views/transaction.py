@@ -2,7 +2,7 @@ from sqlalchemy.orm import join
 from app.model_views.model_view_base import ModelViewAuth
 from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
 from flask_admin.actions import action
-from app import db
+from app.database import db
 from app.models.treasure_item import TreasureItem
 from app.models.student import Student
 from app.models.transaction import Transaction
