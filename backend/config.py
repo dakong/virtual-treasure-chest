@@ -7,7 +7,7 @@ basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, ".env"))
 
 
-class Config:
+class Config(object):
     """Set Flask configuration from .env file."""
 
     # General Config
@@ -22,3 +22,14 @@ class Config:
     SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
     # SQLALCHEMY_ECHO = False
     # SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+class TestConfig(Config):
+    """Test configuration."""
+
+    TESTING = True
+    DEBUG = True
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///virtual_treasure_chest_test.db'
+    BCRYPT_LOG_ROUNDS = 4

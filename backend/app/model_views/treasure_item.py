@@ -1,12 +1,12 @@
-from flask import url_for, session
+from flask import url_for
 from flask_admin import form
-from flask_admin.contrib.sqla import ModelView
+from app.model_views.model_view_base import ModelViewAuth
 from jinja2 import Markup
 
 from app import file_path
 
 
-class TreasureItemView(ModelView):
+class TreasureItemView(ModelViewAuth):
     def _list_thumbnail(view, context, model, name):
         if not model.image_path:
             return ''
@@ -16,10 +16,6 @@ class TreasureItemView(ModelView):
 
         return Markup('<img src="%s">' % url_for('static',
                                                  filename=thumbnail_path))
-
-    def is_accessible(self):
-        return 'userID' in session
-
     column_formatters = {
         'image_path': _list_thumbnail
     }

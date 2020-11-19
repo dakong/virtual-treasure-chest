@@ -1,11 +1,7 @@
-from flask import session
-from flask_admin.contrib.sqla import ModelView
+from app.model_views.model_view_base import ModelViewAuth
 
 
-class StudentView(ModelView):
-    def is_accessible(self):
-        return 'userID' in session
-
+class StudentView(ModelViewAuth):
     column_editable_list = ('points',)
     column_filters = ('first_name', 'last_name')
     column_searchable_list = ('first_name', 'last_name')
