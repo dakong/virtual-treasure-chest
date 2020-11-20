@@ -1,6 +1,6 @@
 import os
 import os.path as op
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from flask_migrate import Migrate
@@ -54,6 +54,12 @@ def create_app(config_object):
                          api.transaction, methods=['POST'])
         app.add_url_rule('/api/purchase/', 'purchase',
                          api.purchase, methods=['POST'])
+
+        def page_not_found(error):
+            return render_template('404.html'), 404
+
+        app.register_error_handler(404, page_not_found)
+
         # Setup admin views
         admin = Admin(app, name='Virtual Treasure Chest',
                       template_mode='bootstrap4',
