@@ -40,7 +40,7 @@ class TestAuthentication:
     def test_login(self, testapp):
         teacher = register_teacher(testapp)
         resp = login(testapp, 'admin.example', 'admin').follow()
-        assert resp.status_int == 200 and resp.request.path == '/admin/'
+        assert (resp.status_int, resp.request.path) == (200, '/admin/')
 
     def test_student_200(self, testapp):
         teacher = register_teacher(testapp)

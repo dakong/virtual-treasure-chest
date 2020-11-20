@@ -131,3 +131,41 @@ def treasure_item():
             })
 
         return generateSuccessResponse({'treasureItems': result})
+
+
+def purchase():
+    purchase_details = request.get_json()
+    student_id = purchase_details['student_id']
+    treasure_item_id = purchase_details['treasure_item_id']
+
+    # first check if student has sufficient funds, and if quantity of treasure item is enough
+    treasure_item = TreasureItem.query.get(treasure_item_id)
+    student = Student.query.get(student_id)
+
+    if treasure_item.cost > student.points:
+        return generateFailResponse({'message': 'Student has insufficient funds'})
+
+    if treasure_item.quantity <= 0:
+        return generateFailResponse({'message': 'Item is out of stock'})
+
+    # If it does than subract cost of item from the total number of points the student has
+    # and decrement quantity of items
+    student.points = student.points - treasure_item.cost
+    treasure_item.quantity = treasure_item.quantity - 1
+
+    # Create a transaction log to record this purchase
+    txn = Transaction(active=True, student_id=student_id,
+                      treasure_item_id=treasure_item_id)
+    db.session.add(txn)
+    db.session.commit()
+
+    return generateSuccessResponse({
+        'student': {
+            'id': student.id,
+            'points': student.points
+        },
+        'treasure_item': {
+            'id': treasure_item.id,
+            'quantity': treasure_item.quantity
+        }
+    })

@@ -52,7 +52,8 @@ def create_app(config_object):
                          api.treasure_item, methods=['GET', 'POST'])
         app.add_url_rule('/api/transaction/', 'transaction',
                          api.transaction, methods=['POST'])
-
+        app.add_url_rule('/api/purchase/', 'purchase',
+                         api.purchase, methods=['POST'])
         # Setup admin views
         admin = Admin(app, name='Virtual Treasure Chest',
                       template_mode='bootstrap4',

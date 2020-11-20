@@ -78,9 +78,66 @@ class TestApprovals:
         student_one_points = Student.query.get(1).points
         student_two_points = Student.query.get(2).points
         active = Transaction.query.filter_by(active=True).count()
+
         assert (item_count, student_one_points,
                 student_two_points, active) == (74, 80, 24, 0)
 
-    def test_approval(self):
-        pass
-        # create_students(treasure_item_mock_data)
+    def test_approval(self, db):
+        create_students(db, student_mock_data)
+        create_treasure_item(db, treasure_item_mock_data)
+
+        txn_ids = create_transactions(db, [{
+            "student_id": 1,
+            "treasure_item_id": 1
+        }, {
+            "student_id": 2,
+            "treasure_item_id": 1
+        }])
+
+        approve_transactions(txn_ids)
+        item_count = TreasureItem.query.get(1).quantity
+        student_one_points = Student.query.get(1).points
+        student_two_points = Student.query.get(2).points
+        active = Transaction.query.filter_by(active=True).count()
+
+        assert (item_count, student_one_points,
+                student_two_points, active) == (72, 75, 19, 0)
+
+    def test_purchase_(self, db, testapp):
+        create_students(db, student_mock_data)
+        create_treasure_item(db, treasure_item_mock_data)
+
+        resp = testapp.post_json(url_for('purchase'), {
+            'student_id': 1,
+            'treasure_item_id': 4
+        })
+        resp_data = json.loads(resp.body.decode('utf-8'))['data']
+
+        assert (resp.status_int, resp_data['student']['points'],
+                resp_data['treasure_item']['quantity']) == (200, 66, 16)
+
+    def test_purchase_insufficient_funds(self, db, testapp):
+        create_students(db, student_mock_data)
+        create_treasure_item(db, treasure_item_mock_data)
+
+        resp = testapp.post_json(url_for('purchase'), {
+            'student_id': 2,
+            'treasure_item_id': 2
+        })
+        resp_data = json.loads(resp.body.decode('utf-8'))
+
+        assert (resp.status_int, resp_data['status'], resp_data['data']['message']) == (
+            200, 'fail', 'Student has insufficient funds')
+
+    def test_purchase_out_of_stock(self, db, testapp):
+        create_students(db, student_mock_data)
+        create_treasure_item(db, treasure_item_mock_data)
+
+        resp = testapp.post_json(url_for('purchase'), {
+            'student_id': 1,
+            'treasure_item_id': 11
+        })
+        resp_data = json.loads(resp.body.decode('utf-8'))
+
+        assert (resp.status_int, resp_data['status'], resp_data['data']['message']) == (
+            200, 'fail', 'Item is out of stock')
