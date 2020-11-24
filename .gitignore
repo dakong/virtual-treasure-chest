@@ -1,0 +1,7 @@
+# python
+/env
+*.pyo
+*.pyc
+*.db
+.env
+/backend/app/images/*

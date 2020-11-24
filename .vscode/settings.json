@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "backend/env/bin/python3",
+    "python.pythonPath": "/home/dakong/virtual-treasure-chest/env/bin/python3",
     "python.linting.pylintArgs": [
         "--load-plugins",
         "pylint-flask"
