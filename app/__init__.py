@@ -1,6 +1,6 @@
 import os
 import os.path as op
-from flask import Flask, url_for, render_template
+from flask import Flask, url_for, render_template, session as app_session
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
 from flask_migrate import Migrate
@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from app.database import db
 
 # Where we will store images for treasure_items
-file_path = op.join(op.dirname(__file__), 'static', 'images', 'treasure_items')
+file_path = op.join(op.dirname(__file__), 'static', 'images')
 
 
 def create_app(config_object):
@@ -17,7 +17,7 @@ def create_app(config_object):
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_object(config_object)
     db.init_app(app)
-    migrate = Migrate(app, db, compare_type=True)
+    migrate = Migrate(app, db, compare_type=True, render_as_batch=True)
 
     # Create directory if it does not exist
     try:
@@ -54,6 +54,26 @@ def create_app(config_object):
                          api.transaction, methods=['POST'])
         app.add_url_rule('/api/purchase/', 'purchase',
                          api.purchase, methods=['POST'])
+
+        def index_view():
+            students = Student.query.with_entities(
+                Student.id, Student.first_name, Student.last_name, Student.profile_image).filter_by(active=True).all()
+
+            students_object = []
+            authenticated = False
+            if 'userID' in app_session:
+                authenticated = True
+            for row in students:
+                s = dict()
+                s['id'] = row.id
+                s['name'] = row.first_name + ' ' + row.last_name
+                s['image'] = op.join('/static', 'images',
+                                     'profile', row.profile_image)
+                students_object.append(s)
+
+            return render_template('index.html', students=students_object, authenticated=authenticated, environment='development')
+
+        app.add_url_rule('/', 'index', index_view, methods=['GET'])
 
         def page_not_found(error):
             return render_template('404.html'), 404

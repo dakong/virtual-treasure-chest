@@ -1,0 +1,41 @@
+{
+  "name": "virtual-treasure-chest",
+  "version": "1.0.0",
+  "description": "Simple application to manage a virtual treasure chest",
+  "main": "client/main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dakong/virtual-treasure-chest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dakong/virtual-treasure-chest/issues"
+  },
+  "homepage": "https://github.com/dakong/virtual-treasure-chest#readme",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/plugin-external-helpers": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "babel-loader": "^8.2.1",
+    "babel-plugin-styled-components": "^1.12.0",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0"
+  }
+}

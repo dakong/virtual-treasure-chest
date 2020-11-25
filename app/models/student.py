@@ -10,6 +10,7 @@ class Student(db.Model):
     last_name = db.Column(db.String(50))
     points = db.Column(db.Integer)
     passcode = db.Column(db.String(100))
+    profile_image = db.Column(db.String(50))
 
     def fullname(self):
         return self.first_name + ' ' + self.last_name

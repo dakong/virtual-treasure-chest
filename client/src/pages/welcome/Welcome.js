@@ -1,18 +1,32 @@
 import React from "react";
 import UserProfileCard from '../../components/userProfileCard';
+import styled from 'styled-components';
+
+const PageContainer = styled.div`
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+`;
+const CardContainer = styled.section`
+    max-width: 960px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, max-content));
+    gap: 16px;
+    justify-content: space-evenly;
+`;
 
 function Welcome({ users }) {
     console.log(users)
     return (
-        <React.Fragment>
+        <PageContainer>
             <section>
                 <h1>Welcome to Ms.Chang's Virtual Classroom Store</h1>
                 <p>Please select your name below to get started.</p>
             </section>
-            <section>
-                {users.map(({ name }) => <UserProfileCard name={name} />)}
-            </section>
-        </React.Fragment>
+            <CardContainer>
+                {users.map(({ name, image, id }) => <UserProfileCard key={id} name={name} image={image}/>)}
+            </CardContainer>
+        </PageContainer>
     );
 }
 

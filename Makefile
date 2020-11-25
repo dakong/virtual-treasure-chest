@@ -11,3 +11,10 @@ install-backend:
 
 run-backend:
 	source env/bin/activate && flask run
+
+clean-pyc:
+	find . -name '*.pyc' -delete
+	find . -type d -name "__pycache__" -delete
+
+test-backend:
+	source env/bin/activate && python -m pytest

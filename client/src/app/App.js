@@ -17,19 +17,16 @@ export default class App extends React.Component {
     super(props);
     
     this.state = {
-      authenticated: true,
-      users: [{name: 'Jennifer Chang'}, {name: 'Jessica Chang'}, {name: 'Daniel Kong'}],
       categories: [{label: 'Stickers', id: 1}, {label: 'Snacks', id: 2}, {label: 'Toys', id: 3}],
-      items: {}
     }
   }
 
   render() {
-    const { authenticated, users, categories } = this.state;
-
+    const { students, authenticated } = this.props;
+    const { categories } = this.state
     return (
       <React.Fragment>
-        { authenticated ? (
+        { !authenticated ? (
           <Router>
             <div>
               <Switch>
@@ -39,17 +36,15 @@ export default class App extends React.Component {
               </Switch>
             </div>
           </Router>
-        ) : <Welcome users={users} />}
+        ) : <Welcome users={students} />}
         
       </React.Fragment>
-      
     );
   }
 }
 
 function TreasureChest({tabs}) {
   let match = useRouteMatch();
-  console.log(match)
 
   return (
     <div>
