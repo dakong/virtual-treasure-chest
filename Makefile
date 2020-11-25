@@ -12,6 +12,9 @@ install-backend:
 run-backend:
 	source env/bin/activate && flask run
 
+compile-client:
+	npm run build -- --watch
+
 clean-pyc:
 	find . -name '*.pyc' -delete
 	find . -type d -name "__pycache__" -delete

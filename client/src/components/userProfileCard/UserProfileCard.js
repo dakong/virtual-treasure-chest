@@ -25,6 +25,7 @@ const Heading = styled.h1`
 const ProfileImage = styled.img`
     max-width: 100%;
     height: 'auto';
+    max-height: 250px;
 `;
 
 function UserProfileCard({ name, image }) {

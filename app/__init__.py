@@ -64,11 +64,16 @@ def create_app(config_object):
             if 'userID' in app_session:
                 authenticated = True
             for row in students:
+                profile_image = 'default-profile.png'
                 s = dict()
                 s['id'] = row.id
                 s['name'] = row.first_name + ' ' + row.last_name
+
+                if row.profile_image is not None:
+                    profile_image = row.profile_image
+
                 s['image'] = op.join('/static', 'images',
-                                     'profile', row.profile_image)
+                                     'profile', profile_image)
                 students_object.append(s)
 
             return render_template('index.html', students=students_object, authenticated=authenticated, environment='development')
