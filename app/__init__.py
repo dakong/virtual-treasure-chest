@@ -9,6 +9,7 @@ from app.database import db
 
 # Where we will store images for treasure_items
 file_path = op.join(op.dirname(__file__), 'static', 'images')
+static_path = file_path = op.join(op.dirname(__file__), 'static')
 
 
 def create_app(config_object):
