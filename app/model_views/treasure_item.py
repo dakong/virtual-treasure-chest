@@ -16,6 +16,12 @@ class TreasureItemView(ModelViewAuth):
 
         return Markup('<img src="%s">' % url_for('static',
                                                  filename=thumbnail_path))
+
+    def create_form(self):
+        form = super(ModelViewAuth, self).create_form()
+        form.active.data = True
+        return form
+
     column_formatters = {
         'image_path': _list_thumbnail
     }
