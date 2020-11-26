@@ -1,3 +1,4 @@
+from flask import request
 from flask_admin import form
 from flask import url_for
 from jinja2 import Markup
@@ -16,6 +17,10 @@ class StudentView(ModelViewAuth):
 
         return Markup('<img src="%s">' % url_for('static',
                                                  filename=thumbnail_path))
+    def create_form(self):
+        form = super(ModelViewAuth, self).create_form()
+        form.active.data = True
+        return form
 
     column_editable_list = ('points',)
     column_filters = ('first_name', 'last_name')
