@@ -4,6 +4,6 @@
 *.pyc
 *.db
 .env
-/app/static/images/
+/app/static/images/treasure_items
 /app/static/scripts/
 /node_modules
