@@ -1,7 +1,7 @@
 import os
 import os.path as op
 from flask import Flask, url_for, render_template, session as app_session
-from flask_admin import Admin
+from flask_admin import Admin, BaseView, expose
 from flask_admin.menu import MenuLink
 from flask_migrate import Migrate
 
@@ -79,6 +79,29 @@ def create_app(config_object):
 
             return render_template('index.html', students=students_object, authenticated=authenticated, environment='development')
 
+        class HomeView(BaseView):
+            @expose('/')
+            def home(self):
+                students = Student.query.with_entities(
+                    Student.id, Student.first_name, Student.last_name, Student.profile_image).filter_by(active=True).all()
+
+                students_object = []
+
+                for row in students:
+                    profile_image = 'default-profile.png'
+                    s = dict()
+                    s['id'] = row.id
+                    s['name'] = row.first_name + ' ' + row.last_name
+
+                    if row.profile_image is not None:
+                        profile_image = row.profile_image
+
+                    s['image'] = op.join('/static', 'images',
+                                         'profile', profile_image)
+                    students_object.append(s)
+
+                return self.render('home.html', students=students_object, environment='development')
+
         app.add_url_rule('/', 'index', index_view, methods=['GET'])
 
         def page_not_found(error):
@@ -93,6 +116,8 @@ def create_app(config_object):
         admin.add_view(StudentView(Student, db.session))
         admin.add_view(TreasureItemView(TreasureItem, db.session))
         admin.add_view(TransactionView(Transaction, db.session))
+        # admin.add_view(HomeView(name="Home", endpoint="/"))
+
         admin.add_link(MenuLink(name='Logout',
                                 category='', url='/logout'))
 

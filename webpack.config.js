@@ -2,13 +2,16 @@ const path = require('path');
 
 module.exports = {
     devtool: 'source-map',
-    entry: './client/src/main.js',
+    entry: {
+      'main': './client/src/main.js',
+      'admin-main': './client/src/adminMain.js'
+    },
     externals: {
         react: 'React',
         'react-dom': 'ReactDOM'
     },
     output: {
-        filename: 'main.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'app/static/scripts'),
         library: 'VirtualTreasureChest',
         libraryTarget: 'var'

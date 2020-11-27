@@ -2,7 +2,7 @@
 <div id="root"></div>
 <script src="https://unpkg.com/react@17/umd/react.{{ environment}}.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.{{ environment }}.js" crossorigin></script>
-<script src="{{ url_for('static', filename='scripts/main.js')}}"></script>
+<script src="{{ url_for('static', filename='scripts/main.bundle.js')}}"></script>
 <script>
     const students = JSON.parse('{{ students | tojson | safe }}');
     const authenticated = JSON.parse('{{ authenticated | tojson | safe }}');
