@@ -1,3 +1,3 @@
-import App from './teacherApp';
+import App from './adminApp';
 
 export { App }

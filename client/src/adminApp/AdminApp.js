@@ -15,7 +15,7 @@ const CardContainer = styled.section`
     justify-content: space-evenly;
 `;
 
-export default class TeacherApp extends React.Component {
+export default class AdminApp extends React.Component {
     constructor(props) {
         super(props);
     }
