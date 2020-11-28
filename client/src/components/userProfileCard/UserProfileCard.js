@@ -1,18 +1,27 @@
 import React from "react";
+import isFunction from 'lodash/isFunction';
+import isNil from 'lodash/isNil';
+
 import styled from 'styled-components';
 
-const Card = styled.div`
+const Card = styled.div.attrs(props => ({
+    clickable: props.clickable
+}))`
     width: 250px;
     border: solid 1px #576675;
     border-radius: 4px;
     position:relative;
-    cursor: pointer;
+    cursor: ${props => props.clickable ? 'pointer' : 'default'};
     background-color: #FFFFFF;
 
     &:hover {
-        background-color: #C0C0C0;
+        background-color: ${props => props.clickable ? '#C0C0C0' : '#FFFFFF'};
     }
-    
+`;
+
+const Input = styled.input`
+    margin: 16px auto;
+    display: block;
 `;
 
 const Heading = styled.h1`
@@ -28,9 +37,16 @@ const ProfileImage = styled.img`
     max-height: 250px;
 `;
 
-function UserProfileCard({ name, image }) {
+function UserProfileCard({ name, image, points, onClickFn, onInputChangedFn }) {
+    const clickable = isFunction(onClickFn);
+    const hasOnChangeFn = isFunction(onInputChangedFn);
+
     return (
-        <Card>
+        <Card 
+            clickable={clickable} 
+            onClick={() => clickable ? onClickFn(): () => {}}
+        >
+            {!isNil(points) && (<Input type="number" value={points} onChange={(e) => hasOnChangeFn ? onInputChangedFn(e) : () => {}}/>)}
             <ProfileImage src={image}></ProfileImage>
             <Heading>{name}</Heading>
         </Card>

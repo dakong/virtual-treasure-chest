@@ -8,7 +8,7 @@ class MyAdminIndexView(AdminIndexView):
     @expose('/')
     def home(self):
         students = Student.query.with_entities(
-            Student.id, Student.first_name, Student.last_name, Student.profile_image).filter_by(active=True).all()
+            Student.id, Student.first_name, Student.last_name, Student.profile_image, Student.points).filter_by(active=True).all()
 
         students_object = []
 
@@ -17,6 +17,7 @@ class MyAdminIndexView(AdminIndexView):
             s = dict()
             s['id'] = row.id
             s['name'] = row.first_name + ' ' + row.last_name
+            s['points'] = row.points
 
             if row.profile_image is not None:
                 profile_image = row.profile_image

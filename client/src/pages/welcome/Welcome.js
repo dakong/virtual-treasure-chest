@@ -16,7 +16,6 @@ const CardContainer = styled.section`
 `;
 
 function Welcome({ users }) {
-    console.log(users)
     return (
         <PageContainer>
             <section>
@@ -24,7 +23,7 @@ function Welcome({ users }) {
                 <p>Please select your name below to get started.</p>
             </section>
             <CardContainer>
-                {users.map(({ name, image, id }) => <UserProfileCard key={id} name={name} image={image}/>)}
+                {users.map(({ name, image, id }) => <UserProfileCard clickable key={id} name={name} image={image}/>)}
             </CardContainer>
         </PageContainer>
     );

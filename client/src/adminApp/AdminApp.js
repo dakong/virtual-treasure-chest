@@ -18,19 +18,40 @@ const CardContainer = styled.section`
 export default class AdminApp extends React.Component {
     constructor(props) {
         super(props);
+        this.onCardInputChanged = this.onCardInputChanged.bind(this);
+        this.state = {
+            students: props.students
+        }
     }
+
+    onCardInputChanged (id) {
+        return (e) => {
+            const {students} = this.state;
+            const {value} = e.target;
+            const studentsWithUpdatedPoints = students.map(student => {
+                return student.id === id ? { ...student, points: value } : student;
+            });
+            
+            // make call to students api to update points.
+            // Do we want to do a write through?
+            this.setState({ students: studentsWithUpdatedPoints })
+        }
+    }
+
     render(){
-        const { students } = this.props;
+        const { students } = this.state;
 
         return(
             <PageContainer>
                 <CardContainer>
-                    {students.map(({ name, image, id }) => (
+                    {students.map(({ name, image, id, points }) => (
                         <UserProfileCard 
                             editable={true} 
                             key={id} 
                             name={name} 
                             image={image} 
+                            points={points}
+                            onInputChangedFn={this.onCardInputChanged(id)}
                         />
                     ))}   
                 </CardContainer>
