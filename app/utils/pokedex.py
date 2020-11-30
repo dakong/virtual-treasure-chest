@@ -12,12 +12,8 @@ def create_pokemon_dict():
     with open('pokemon-gen1.csv', newline='') as csvfile:
         pokereader = csv.DictReader(csvfile)
         for row in pokereader:
-            print(row['Number'], row['Name'])
             name = row['Name']
             number = row['Number']
             pokedex[name] = '/static/images/profile/' + \
                 str(number).zfill(3) + '.png'
     return pokedex
-
-
-print(create_pokemon_dict())

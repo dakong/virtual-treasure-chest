@@ -46,7 +46,7 @@ def create_app(config_object):
                          session.verify, methods=['POST'])
         app.add_url_rule('/logout/', 'logout', session.logout)
         app.add_url_rule('/api/student/', 'student',
-                         api.student, methods=['GET', 'POST'])
+                         api.student, methods=['GET', 'POST', 'PUT'])
         app.add_url_rule('/api/teacher/', 'teacher',
                          api.teacher, methods=['POST'])
         app.add_url_rule('/api/treasureitem/', 'treasure_item',

@@ -1,6 +1,8 @@
 import React from "react";
-import UserProfileCard from '../components/userProfileCard';
 import styled from 'styled-components';
+
+import UserProfileCard from '../components/userProfileCard';
+import { updateStudent } from '../services/student';
 
 const PageContainer = styled.div`
     max-width: 960px;
@@ -35,6 +37,8 @@ export default class AdminApp extends React.Component {
             // make call to students api to update points.
             // Do we want to do a write through?
             this.setState({ students: studentsWithUpdatedPoints })
+            updateStudent({ id, points: value }).then((result => console.log(result)));
+
         }
     }
 

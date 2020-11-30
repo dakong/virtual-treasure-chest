@@ -43,6 +43,21 @@ def student():
 
         return generateSuccessResponse({'students': result})
 
+    if request.method == 'PUT':
+        studentData = request.get_json()
+        id = studentData['id']
+        points = studentData['points']
+        student = Student.query.get(id)
+        student.points = points
+        db.session.commit()
+
+        return generateSuccessResponse({
+            'student': {
+                'id': student.id,
+                'points': student.points
+            }
+        })
+
 
 def teacher():
     # Create a way where only I can create teachers
