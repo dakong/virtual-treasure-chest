@@ -37,15 +37,11 @@ const ProfileImage = styled.img`
     max-height: 250px;
 `;
 
-function UserProfileCard({ name, image, points, onClickFn, onInputChangedFn }) {
-    const clickable = isFunction(onClickFn);
+function UserProfileCard({ name, image, points, onInputChangedFn, clickable = false }) {
     const hasOnChangeFn = isFunction(onInputChangedFn);
 
     return (
-        <Card 
-            clickable={clickable} 
-            onClick={() => clickable ? onClickFn(): () => {}}
-        >
+        <Card clickable={clickable}>
             {!isNil(points) && (<Input type="number" value={points} onChange={(e) => hasOnChangeFn ? onInputChangedFn(e) : () => {}}/>)}
             <ProfileImage src={image}></ProfileImage>
             <Heading>{name}</Heading>

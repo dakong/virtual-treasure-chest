@@ -103,6 +103,8 @@ def create_app(config_object):
                 return self.render('home.html', students=students_object, environment='development')
 
         app.add_url_rule('/', 'index', index_view, methods=['GET'])
+        app.add_url_rule('/passcode/',
+                         'index', index_view, methods=['GET'])
 
         def page_not_found(error):
             return render_template('404.html'), 404

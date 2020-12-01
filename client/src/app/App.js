@@ -1,77 +1,73 @@
 import React from "react";
-import isEmpty from "lodash/isEmpty";
 
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-  useHistory
+  Route
 } from "react-router-dom";
-import Welcome from '../pages/welcome';
 
+import Passcode from '../pages/passcode';
+import Welcome from '../pages/welcome';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      categories: [{label: 'Stickers', id: 1}, {label: 'Snacks', id: 2}, {label: 'Toys', id: 3}],
+      enteredPasscode: [],
+    }
+    this.clearPasscode = this.clearPasscode.bind(this);
+    this.onKeyPadClick = this.onKeyPadClick.bind(this);
+  }
+
+  clearPasscode() {
+    this.setState({
+      enteredPasscode: []
+    });
+  }
+
+  onKeyPadClick(id, value) {
+    const { enteredPasscode } = this.state;
+    let newPasscode = enteredPasscode;
+    if (enteredPasscode.length < 2) {
+      newPasscode = [...enteredPasscode, value];
+      this.setState({
+        enteredPasscode: newPasscode
+      });
+    } 
+    
+    if (newPasscode.length === 2) {
+      // Passcode is filled, let's make a call to validate the student
+      console.log( `validate student id: ${id}, with passcode: ${newPasscode.join('')}`);
     }
   }
 
   render() {
-    const { students, authenticated } = this.props;
-    const { categories } = this.state
+    const { students } = this.props;
+    const { enteredPasscode } = this.state
+
+    const PublicPage = () => {
+      return (
+        <Router>
+          <Switch>
+              <Route path="/passcode">
+                <Passcode 
+                  clearPasscode={this.clearPasscode}
+                  enteredPasscode={enteredPasscode} 
+                  onKeyPadClick={this.onKeyPadClick} 
+                />
+              </Route>
+              <Route path="/">
+                <Welcome users={students} />
+              </Route>
+          </Switch>
+        </Router>
+      )
+    };
+
     return (
       <React.Fragment>
-        { !authenticated ? (
-          <Router>
-            <div>
-              <Switch>
-                <Route path="/treasure-chest">
-                  <TreasureChest tabs={categories}/>
-                </Route>
-              </Switch>
-            </div>
-          </Router>
-        ) : <Welcome users={students} />}
-        
+        <PublicPage />
       </React.Fragment>
     );
   }
-}
-
-function TreasureChest({tabs}) {
-  let match = useRouteMatch();
-
-  return (
-    <div>
-      <h2>Topics</h2>
-
-      <ul>
-        {tabs.map(({label, id}) => (
-          <li key={id}>
-            <Link to={`${match.url}/${label}`}>{label}</Link>
-          </li>
-        ))}
-      </ul>
-
-      {/* The Topics page has its own <Switch> with more routes
-          that build on the /topics URL path. You can think of the
-          2nd <Route> here as an "index" page for all topics, or
-          the page that is shown when no topic is selected */}
-      <Switch>
-        <Route path={`${match.path}/:topicId`}>
-          <Topic />
-        </Route>
-      </Switch>
-    </div>
-  );
-}
-
-function Topic() {
-  let { topicId } = useParams();
-  return <h3>Requested topic ID: {topicId}</h3>;
 }

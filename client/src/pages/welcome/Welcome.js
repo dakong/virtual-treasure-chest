@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserProfileCard from '../../components/userProfileCard';
 import styled from 'styled-components';
+
+import { Link } from "react-router-dom";
 
 const PageContainer = styled.div`
     max-width: 960px;
@@ -15,6 +17,11 @@ const CardContainer = styled.section`
     justify-content: space-evenly;
 `;
 
+const CardLink = styled(Link)`
+    text-decoration-line: none;
+    color: black;
+`;
+
 function Welcome({ users }) {
     return (
         <PageContainer>
@@ -23,7 +30,18 @@ function Welcome({ users }) {
                 <p>Please select your name below to get started.</p>
             </section>
             <CardContainer>
-                {users.map(({ name, image, id }) => <UserProfileCard clickable key={id} name={name} image={image}/>)}
+                {users.map(({ name, image, id }) => (
+                    <CardLink 
+                        key={id} 
+                        to={`/passcode?id=${id}`}
+                    >
+                        <UserProfileCard 
+                            clickable 
+                            name={name} 
+                            image={image}
+                        />
+                    </CardLink>
+                ))}
             </CardContainer>
         </PageContainer>
     );

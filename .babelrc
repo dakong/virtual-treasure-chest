@@ -8,5 +8,9 @@
           }
       ]
     ],
-    "plugins": ["babel-plugin-styled-components"]
+    "plugins": [
+      "babel-plugin-styled-components", 
+      ["@babel/plugin-transform-runtime", {"regenerator": true}], 
+      ["@babel/plugin-transform-async-to-generator"]
+    ]
   }
