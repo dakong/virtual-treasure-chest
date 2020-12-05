@@ -74,7 +74,8 @@ def student_home_view():
     return render_template(
         'index.html',
         students=students,
-        treasure_items={},
+        current_student={},
+        treasure_items=[],
         authenticated=authenticated,
         environment='development'
     )

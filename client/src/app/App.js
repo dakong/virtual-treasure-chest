@@ -23,9 +23,10 @@ class App extends React.Component {
       treasureItems
     } = this.props;
 
-    const ShopWithProps = () => {
+    const ShopWithProps = ({history}) => {
       return (
         <Shop 
+          history={history}
           treasureItems={treasureItems} 
           currentStudent={currentStudent}
         />
