@@ -6,6 +6,7 @@
 <script>
     const students = JSON.parse('{{ students | tojson | safe }}');
     const authenticated = JSON.parse('{{ authenticated | tojson | safe }}');
+    const treasure_items = JSON.parse('{{ treasure_items | tojson | safe }}');
     ReactDOM.render(
         React.createElement(VirtualTreasureChest.App, { students, authenticated }),
         document.getElementById('root')

@@ -47,6 +47,11 @@ def verify():
     return generateFailResponse({'message': 'Invalid passcode'})
 
 
+def logout_student():
+    session.pop('studentID', None)
+    return generateSuccessResponse({'message': 'Succesfully ended session'})
+
+
 def logout():
     session.pop('userID', None)
     return redirect(url_for('login'))

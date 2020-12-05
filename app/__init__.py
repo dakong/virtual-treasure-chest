@@ -1,6 +1,6 @@
 import os
 import os.path as op
-from flask import Flask, url_for, render_template, session as app_session
+from flask import Flask, url_for, render_template, redirect, session as app_session
 from flask_admin import Admin, BaseView, expose
 from flask_admin.menu import MenuLink
 from flask_migrate import Migrate
@@ -44,6 +44,8 @@ def create_app(config_object):
                          methods=['POST', 'GET'])
         app.add_url_rule('/verify/', 'verify',
                          session.verify, methods=['POST'])
+        app.add_url_rule('/logoutstudent/', 'logout_student',
+                         session.logout_student, methods=['POST'])
         app.add_url_rule('/logout/', 'logout', session.logout)
         app.add_url_rule('/api/student/', 'student',
                          api.student, methods=['GET', 'POST', 'PUT'])
@@ -62,8 +64,12 @@ def create_app(config_object):
 
             students_object = []
             authenticated = False
-            if 'userID' in app_session:
+            if 'studentID' in app_session:
                 authenticated = True
+
+            if authenticated is True:
+                return redirect(url_for('shop'))
+
             for row in students:
                 profile_image = 'default-profile.png'
                 s = dict()
@@ -77,7 +83,47 @@ def create_app(config_object):
                                      'profile', profile_image)
                 students_object.append(s)
 
-            return render_template('index.html', students=students_object, authenticated=authenticated, environment='development')
+            return render_template('index.html', students=students_object,  treasure_items={}, authenticated=authenticated, environment='development')
+
+        def authenticated_shop_view():
+            students = Student.query.with_entities(
+                Student.id,
+                Student.first_name,
+                Student.last_name,
+                Student.profile_image
+            ).filter_by(active=True).all()
+
+            treasure_items = TreasureItem.query.with_entities(
+                TreasureItem.id,
+                TreasureItem.cost,
+                TreasureItem.name,
+                TreasureItem.description,
+                TreasureItem.quantity,
+                TreasureItem.image_path
+            ).filter_by(active=True).all()
+
+            students_object = []
+            authenticated = False
+            if 'studentID' in app_session:
+                authenticated = True
+
+            if authenticated is False:
+                return redirect(url_for('index'))
+
+            for row in students:
+                profile_image = 'default-profile.png'
+                s = dict()
+                s['id'] = row.id
+                s['name'] = row.first_name + ' ' + row.last_name
+
+                if row.profile_image is not None:
+                    profile_image = row.profile_image
+
+                s['image'] = op.join('/static', 'images',
+                                     'profile', profile_image)
+                students_object.append(s)
+
+            return render_template('index.html', students=students_object, treasure_items=treasure_items, authenticated=authenticated, environment='development')
 
         class HomeView(BaseView):
             @expose('/')
@@ -104,9 +150,10 @@ def create_app(config_object):
 
         app.add_url_rule('/', 'index', index_view, methods=['GET'])
         app.add_url_rule('/passcode/',
-                         'index', index_view, methods=['GET'])
+                         'passcode', index_view, methods=['GET'])
+
         app.add_url_rule('/shop/',
-                         'index', index_view, methods=['GET'])
+                         'shop', authenticated_shop_view, methods=['GET'])
 
         def page_not_found(error):
             return render_template('404.html'), 404

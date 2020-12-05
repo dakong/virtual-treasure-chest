@@ -16,17 +16,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { students } = this.props;
+    const { students, authenticated } = this.props;
 
     const PublicPage = () => {
       return (
         <Router>
           <Switch>
-              <Route path="/passcode">
-                <Passcode />
+              <Route path="/passcode" component={Passcode}>
               </Route>
-              <Route path="/shop">
-                <Shop />
+              <Route path="/shop" component={Shop}>
               </Route>
               <Route path="/">
                 <Welcome users={students} />

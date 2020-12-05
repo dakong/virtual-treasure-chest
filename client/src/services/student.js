@@ -38,3 +38,12 @@ export async function verifyStudent(data) {
         console.log('Error occured: ', e);
     }
 }
+
+export async function studentLogout() {
+    try {
+        const result = await fetch('/logoutstudent/', { method: 'POST' });
+        return result.json();
+    } catch(e) {
+        console.log('Error occured: ', e);
+    }
+}

@@ -72,7 +72,7 @@ class Passcode extends React.Component {
         return (
             <PageContainer>
                 <section>
-                    <Link to='/' onClick={this.clearPasscode}>Back</Link>
+                    <Link to='/' replace={true} onClick={this.clearPasscode}>Back</Link>
                     <h1>Enter your 2 digit passcode below</h1>
                 </section>
                 <NumberPad 
@@ -84,4 +84,4 @@ class Passcode extends React.Component {
     }
 };
 
-export default withRouter(Passcode);
+export default Passcode;
