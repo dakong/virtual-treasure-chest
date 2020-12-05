@@ -12,8 +12,8 @@ class Shop extends React.Component {
         const result = await studentLogout();
 
         if (result.status === 'success') {
-            const { history } = this.props;
-            history.replace('/');
+            this.props.history.replace('/');
+            this.props.onLogout();
         }
     }
 

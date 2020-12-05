@@ -10,7 +10,18 @@ from app.models.transaction import Transaction
 from app.models.treasure_item import TreasureItem
 
 
-def student():
+def single_student(id):
+    student = Student.query.get(id)
+
+    return {
+        'id': student.id,
+        'name': student.first_name + ' ' + student.last_name,
+        'profile_image': student.profile_image,
+        'points': student.points
+    }
+
+
+def student(id):
     if request.method == 'POST':
         studentData = request.get_json()
         # need to hash the passwords when we save
@@ -36,12 +47,15 @@ def student():
         })
 
     if request.method == 'GET':
-        allStudents = Student.query.all()
-        result = []
-        for student in allStudents:
-            result.append({'id': student.id, 'name': student.fullname()})
+        if id is None:
+            allStudents = Student.query.all()
+            result = []
+            for student in allStudents:
+                result.append({'id': student.id, 'name': student.fullname()})
 
-        return generateSuccessResponse({'students': result})
+            return generateSuccessResponse({'students': result})
+
+        return generateSuccessResponse({'student': single_student(id)})
 
     if request.method == 'PUT':
         studentData = request.get_json()
@@ -109,7 +123,7 @@ def transaction():
     })
 
 
-@ login_required
+# @ login_required
 def treasure_item():
     if request.method == 'POST':
         treasureItemData = request.get_json()
@@ -134,15 +148,16 @@ def treasure_item():
         })
 
     if request.method == 'GET':
-        treasureItems = TreasureItem.query.all()
+        treasureItems = TreasureItem.query.filter_by(active=True).all()
         result = []
         for treasureItem in treasureItems:
             result.append({
                 'id': treasureItem.id,
                 'name': treasureItem.name,
                 'cost': treasureItem.cost,
-                'description': treasureItem.descriptdaion,
-                'quantity': treasureItem.quantity
+                'description': treasureItem.description,
+                'quantity': treasureItem.quantity,
+                'image_path': treasureItem.image_path,
             })
 
         return generateSuccessResponse({'treasureItems': result})

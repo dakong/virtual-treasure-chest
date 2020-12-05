@@ -48,8 +48,10 @@ def create_app(config_object):
         app.add_url_rule('/logoutstudent/', 'logout_student',
                          session.logout_student, methods=['POST'])
         app.add_url_rule('/logout/', 'logout', session.logout)
-        app.add_url_rule('/api/student/', 'student',
+
+        app.add_url_rule('/api/student/<id>', 'student',
                          api.student, methods=['GET', 'POST', 'PUT'])
+
         app.add_url_rule('/api/teacher/', 'teacher',
                          api.teacher, methods=['POST'])
         app.add_url_rule('/api/treasureitem/', 'treasure_item',

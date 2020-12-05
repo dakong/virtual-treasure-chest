@@ -34,15 +34,14 @@ class Passcode extends React.Component {
     
     async onKeyPadClick(id, value) {
         const { enteredPasscode, isVerifyingPasscode } = this.state;
+        const { onSuccess } = this.props;
 
         if (isVerifyingPasscode) return;
 
         let newPasscode = enteredPasscode;
         if (enteredPasscode.length < 2) {
             newPasscode = [...enteredPasscode, value];
-            this.setState({
-            enteredPasscode: newPasscode
-            });
+            this.setState({ enteredPasscode: newPasscode });
         } 
         
         if (newPasscode.length === 2) {
@@ -57,12 +56,10 @@ class Passcode extends React.Component {
                 validatedPasscode: result.status === 'success',
                 enteredPasscode: [] 
             });
-            console.log(result)
+            
             if (result.status === 'success') {
-                let {history} = this.props;
-                console.log(history)
-                console.log('updating history')
-                history.replace('/shop');
+                this.props.history.replace('/shop');
+                onSuccess(id);
             }
         }
     }

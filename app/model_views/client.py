@@ -27,14 +27,7 @@ def get_students():
 
 
 def get_treasure_items():
-    treasure_items = TreasureItem.query.with_entities(
-        TreasureItem.id,
-        TreasureItem.cost,
-        TreasureItem.name,
-        TreasureItem.description,
-        TreasureItem.quantity,
-        TreasureItem.image_path
-    ).filter_by(active=True).all()
+    treasure_items = TreasureItem.query.filter_by(active=True).all()
     treasure_items_object = []
 
     for row in treasure_items:

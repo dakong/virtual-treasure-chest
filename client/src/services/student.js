@@ -15,6 +15,15 @@ let updateStudentPoints = debounce(async function (data) {
     }
 }, 500);
 
+export async function fetchStudent(id) {
+    try {
+        const result = await fetch(`/api/student/${id}`, { method: 'GET' });
+        return result.json();
+    } catch(e) {
+        console.log('Error occured: ', e);
+    }
+}
+
 export async function updateStudent(data) {
     try {
         const result = await updateStudentPoints(data, resolve, reject);
