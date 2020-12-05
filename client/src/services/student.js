@@ -1,4 +1,3 @@
-import { result } from 'lodash';
 import debounce from 'lodash/debounce';
 
 let updateStudentPoints = debounce(async function (data) {
@@ -20,6 +19,21 @@ export async function updateStudent(data) {
     try {
         const result = await updateStudentPoints(data, resolve, reject);
         return result;
+    } catch(e) {
+        console.log('Error occured: ', e);
+    }
+}
+
+export async function verifyStudent(data) {
+    try {
+        const result = await fetch('/verify/', {
+            method: 'POST',
+            headers: new Headers({
+                "Authorization": `Basic ${btoa(`${data.userID}:${data.passcode}`)}`
+            })
+        });
+
+        return result.json();
     } catch(e) {
         console.log('Error occured: ', e);
     }

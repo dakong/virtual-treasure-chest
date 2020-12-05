@@ -39,9 +39,9 @@ def verify():
     if student == None:
         return generateFailResponse({'message': 'User not found'})
 
-    if student.passcode == pascode:
+    if student.passcode == passcode:
         # password match. Let's store user session
-        session['userID'] = userID
+        session['studentID'] = userID
         return generateSuccessResponse({'message': 'Succesfully created session'})
 
     return generateFailResponse({'message': 'Invalid passcode'})

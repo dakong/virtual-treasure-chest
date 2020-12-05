@@ -34,6 +34,7 @@ function Welcome({ users }) {
                     <CardLink 
                         key={id} 
                         to={`/passcode?id=${id}`}
+                        replace={true}
                     >
                         <UserProfileCard 
                             clickable 
