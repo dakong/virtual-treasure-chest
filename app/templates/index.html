@@ -5,8 +5,10 @@
 <script src="{{ url_for('static', filename='scripts/main.bundle.js')}}"></script>
 <script>
     const students = JSON.parse('{{ students | tojson | safe }}');
+    const current_student = JSON.parse('{{ current_student | tojson | safe }}');
     const authenticated = JSON.parse('{{ authenticated | tojson | safe }}');
     const treasure_items = JSON.parse('{{ treasure_items | tojson | safe }}');
+
     ReactDOM.render(
         React.createElement(VirtualTreasureChest.App, { students, authenticated }),
         document.getElementById('root')
