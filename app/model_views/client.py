@@ -27,7 +27,7 @@ def get_students():
 
 
 def get_treasure_items():
-    return TreasureItem.query.with_entities(
+    treasure_items = TreasureItem.query.with_entities(
         TreasureItem.id,
         TreasureItem.cost,
         TreasureItem.name,
@@ -35,6 +35,19 @@ def get_treasure_items():
         TreasureItem.quantity,
         TreasureItem.image_path
     ).filter_by(active=True).all()
+    treasure_items_object = []
+
+    for row in treasure_items:
+        treasure_items_object.append({
+            'id': row.id,
+            'cost': row.cost,
+            'name': row.name,
+            'description': row.description,
+            'quantity': row.quantity,
+            'image_path': row.image_path,
+        })
+
+    return treasure_items_object
 
 
 def get_current_student(id):

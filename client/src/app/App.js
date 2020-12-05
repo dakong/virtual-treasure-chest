@@ -16,7 +16,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { students, authenticated } = this.props;
+    const { 
+      authenticated,
+      students, 
+      currentStudent,
+      treasureItems
+    } = this.props;
+
+    const ShopWithProps = () => {
+      return (
+        <Shop 
+          treasureItems={treasureItems} 
+          currentStudent={currentStudent}
+        />
+      );
+    };
 
     const PublicPage = () => {
       return (
@@ -24,7 +38,7 @@ class App extends React.Component {
           <Switch>
               <Route path="/passcode" component={Passcode}>
               </Route>
-              <Route path="/shop" component={Shop}>
+              <Route path="/shop" component={ShopWithProps}>
               </Route>
               <Route path="/">
                 <Welcome users={students} />
