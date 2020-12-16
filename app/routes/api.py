@@ -165,6 +165,7 @@ def treasure_item():
 
 def purchase():
     purchase_details = request.get_json()
+    print(purchase_details)
     student_id = purchase_details['student_id']
     treasure_item_id = purchase_details['treasure_item_id']
 
