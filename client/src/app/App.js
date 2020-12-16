@@ -8,6 +8,7 @@ import {
 
 import { fetchTreasureItems } from '../services/treasureItem';
 import { fetchStudent } from '../services/student';
+import { purchaseItem } from '../services/treasureItem';
 
 import Passcode from '../pages/passcode';
 import Welcome from '../pages/welcome';
@@ -25,6 +26,7 @@ class App extends React.Component {
       treasureItems: props.treasureItems
     }
 
+    this.makePurchase = this.makePurchase.bind(this);
     this.fetchShopItemsAndCurrentStudent = this.fetchShopItemsAndCurrentStudent.bind(this);
     this.clearSessionData = this.clearSessionData.bind(this);
   }
@@ -36,11 +38,39 @@ class App extends React.Component {
         fetchStudent(studentId)
       ]);
 
-      this.setState({ 
+      this.setState({
         treasureItems: treasureItemResult.data.treasureItems,
         currentStudent: currentStudentResult.data.student
       });
     } catch(e) {
+      console.log('an error occurred: ', e);
+    }
+  }
+
+  async makePurchase(studentId, treasureItemId) {
+    try {
+      const result = await purchaseItem(studentId, treasureItemId);
+      const { status, data } = result;
+      if (status === 'success') {
+        const { treasureItems, currentStudent } = this.state;
+
+        const updatedTreasureItems = treasureItems.map((item) => {
+          return item.id === data.treasure_item.id ?
+            {...item, quantity: data.treasure_item.quantity} :
+            item;
+        });
+
+        const updatedCurrentStudent = {
+          ...currentStudent,
+          points: data.student.points,
+        }
+
+        this.setState({
+          treasureItems: updatedTreasureItems,
+          currentStudent: updatedCurrentStudent
+        });
+      }
+    } catch (e) {
       console.log('an error occurred: ', e);
     }
   }
@@ -53,27 +83,28 @@ class App extends React.Component {
   }
 
   render() {
-    const { 
+    const {
       authenticated,
-      students, 
+      students,
       currentStudent,
       treasureItems
     } = this.state;
 
     const ShopWithProps = ({ history }) => {
       return (
-        <Shop 
+        <Shop
           history={history}
-          treasureItems={treasureItems} 
+          treasureItems={treasureItems}
           currentStudent={currentStudent}
           onLogout={this.clearSessionData}
+          onPurchase={this.makePurchase}
         />
       );
     };
 
     const PasscodeWithProps = ({ history }) => {
       return (
-        <Passcode 
+        <Passcode
           history={history}
           onSuccess={this.fetchShopItemsAndCurrentStudent}
         />

@@ -4,27 +4,33 @@ import groupBy from 'lodash/groupBy';
 import styled from 'styled-components';
 
 import { studentLogout } from '../../services/student';
-import { purchaseItem } from '../../services/treasureItem';
 
 function groupByCost(items) {
     return Object.entries(groupBy(items, 'cost')).sort((a,b) => a[0] - b[0]);
 }
 
+const Page = styled.div`
+    margin: 16px;
+`;
+
+const PriceLabel = styled.h1`
+`;
+
 const Card = styled.div`
-    border: solid 2px #008080;
+    border: solid 4px #a5dede;
     border-radius: 8px;
     width: 250px;
     max-height: 500px;
-    margin: 16px;
     padding: 8px;
 `;
 
 const CardContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-rows: repeat(3, auto-fit);
+    gap: 16px;
     margin: 16px auto;
-    justify-content: center;
+
 `;
 
 const CardTitle = styled.h1`
@@ -38,8 +44,9 @@ const CardSubTitle = styled.h2`
 `;
 
 const CardButton = styled.button`
+    cursor: pointer;
     width: 100%;
-    background-color: #66b2b2;
+    background-color: #46d7ba;
     border: solid 1px #004c4c;
     padding: 8px;
     font-size: 1.5rem;
@@ -73,25 +80,25 @@ class Shop extends React.Component {
     }
 
     render() {
-        const { currentStudent, treasureItems } = this.props;
+        const { currentStudent, treasureItems, onPurchase } = this.props;
         const groupedItems = groupByCost(treasureItems);
         return (
             <React.Fragment>
                 <button onClick={this.onLogout}>Logout</button>
-                <h1>{`Hey ${currentStudent.name}, you currently have ${currentStudent.points} points!`}</h1>
-                <h2>Treasure items</h2>
+                <Page>
+                    <h1>{`Hey ${currentStudent.name}, you currently have ${currentStudent.points} points!`}</h1>
                     {groupedItems.map(([cost, items]) => (
                         <React.Fragment>
-                            <h1>{`Items for ${cost} dollars`}</h1>
+                            <PriceLabel>{`$${cost}`}</PriceLabel>
                             <CardContainer>
-                                {items.map(({id, cost, name, quantity}) => (
+                                {items.map(({id, cost, name, quantity, image_path}) => (
                                     <Card>
-                                        <CardImage alt={`${name} image`}></CardImage>
+                                        <CardImage alt={`${name} image`} src={image_path}></CardImage>
                                         <CardTitle>{name}</CardTitle>
                                         <CardSubTitle>{`Price: $${cost}`}</CardSubTitle>
                                         <CardSubTitle>{`Quantity: ${quantity}`}</CardSubTitle>
                                         {this.canPurchase(cost) && (
-                                            <CardButton onClick={() => purchaseItem(currentStudent.id, id)}>
+                                            <CardButton onClick={() => onPurchase(currentStudent.id, id)}>
                                                 Buy
                                             </CardButton>
                                         )}
@@ -99,9 +106,10 @@ class Shop extends React.Component {
                                 ))}
                             </CardContainer>
                         </React.Fragment>
-                ))}
+                    ))}
+                </Page>
             </React.Fragment>
-        )
+        );
     }
 };
 export default Shop;

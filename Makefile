@@ -7,7 +7,7 @@ create-env:
 	${PYTHON} -m venv env
 
 install-backend:
-	source env/bin/activate && cd backend && pip install -r requirements.txt
+	source env/bin/activate && pip install -r requirements.txt
 
 run-backend:
 	source env/bin/activate && flask run

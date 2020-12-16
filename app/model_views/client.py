@@ -37,7 +37,7 @@ def get_treasure_items():
             'name': row.name,
             'description': row.description,
             'quantity': row.quantity,
-            'image_path': row.image_path,
+            'image_path': op.join('/static', 'images', 'treasure_items', row.image_path)
         })
 
     return treasure_items_object

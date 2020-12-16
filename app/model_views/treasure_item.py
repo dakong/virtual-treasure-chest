@@ -28,7 +28,7 @@ class TreasureItemView(ModelViewAuth):
     column_list = ('image_path', 'name', 'description', 'cost', 'quantity')
     form_extra_fields = {
         'image_path': form.ImageUploadField('Image',
-                                            base_path=file_path + '/treasure_items/',
+                                            base_path=file_path + '/images/treasure_items/',
                                             url_relative_path='images/treasure_items/',
                                             thumbnail_size=(100, 100, True))
     }

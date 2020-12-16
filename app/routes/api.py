@@ -1,5 +1,6 @@
 import bcrypt
 from flask import current_app as app, request, session
+import os.path as op
 from app.database import db
 
 from app.utils.auth import login_required
@@ -22,30 +23,6 @@ def single_student(id):
 
 
 def student(id):
-    if request.method == 'POST':
-        studentData = request.get_json()
-        # need to hash the passwords when we save
-        passcode = studentData['passcode']
-        first_name = studentData['first_name']
-        last_name = studentData['last_name']
-
-        student = Student(
-            first_name=first_name,
-            last_name=last_name,
-            passcode=passcode,
-            active=True,
-            points=0)
-
-        db.session.add(student)
-        db.session.commit()
-
-        return generateSuccessResponse({
-            'student': {
-                'id': student.id,
-                'name': student.fullname()
-            }
-        })
-
     if request.method == 'GET':
         if id is None:
             allStudents = Student.query.all()
@@ -125,28 +102,6 @@ def transaction():
 
 # @ login_required
 def treasure_item():
-    if request.method == 'POST':
-        treasureItemData = request.get_json()
-        cost = treasureItemData['cost']
-        description = treasureItemData['description']
-        name = treasureItemData['name']
-        quantity = treasureItemData['quantity']
-
-        treasureItem = TreasureItem(
-            cost=cost, name=name, description=description, quantity=quantity)
-        db.session.add(treasureItem)
-        db.session.commit()
-
-        return generateSuccessResponse({
-            'treasureItem': {
-                'id': treasureItem.id,
-                'name': treasureItem.name,
-                'cost': treasureItem.cost,
-                'description': treasureItem.description,
-                'quantity': treasureItem.quantity
-            }
-        })
-
     if request.method == 'GET':
         treasureItems = TreasureItem.query.filter_by(active=True).all()
         result = []
@@ -157,7 +112,7 @@ def treasure_item():
                 'cost': treasureItem.cost,
                 'description': treasureItem.description,
                 'quantity': treasureItem.quantity,
-                'image_path': treasureItem.image_path,
+                'image_path': op.join('/static', 'images', 'treasure_items', treasureItem.image_path)
             })
 
         return generateSuccessResponse({'treasureItems': result})

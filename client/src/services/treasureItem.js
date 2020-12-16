@@ -9,7 +9,7 @@ export async function fetchTreasureItems() {
 
 export async function purchaseItem(studentId, treasureItemId) {
     try {
-        const result = await fetch('/api/purchase/', { 
+        const result = await fetch('/api/purchase/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
