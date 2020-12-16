@@ -10,29 +10,17 @@ from app.models.teacher import Teacher
 from app.models.transaction import Transaction
 from app.models.treasure_item import TreasureItem
 
-
-def single_student(id):
-    student = Student.query.get(id)
-
-    return {
-        'id': student.id,
-        'name': student.first_name + ' ' + student.last_name,
-        'profile_image': student.profile_image,
-        'points': student.points
-    }
-
-
 def student(id):
     if request.method == 'GET':
-        if id is None:
-            allStudents = Student.query.all()
-            result = []
-            for student in allStudents:
-                result.append({'id': student.id, 'name': student.fullname()})
+        student = Student.query.get(id)
 
-            return generateSuccessResponse({'students': result})
-
-        return generateSuccessResponse({'student': single_student(id)})
+        studentObject = {
+            'id': student.id,
+            'name': student.first_name + ' ' + student.last_name,
+            'profile_image': student.profile_image,
+            'points': student.points
+        }
+        return generateSuccessResponse({'student': studentObject})
 
     if request.method == 'PUT':
         studentData = request.get_json()

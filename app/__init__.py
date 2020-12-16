@@ -49,7 +49,7 @@ def create_app(config_object):
                          session.logout_student, methods=['POST'])
         app.add_url_rule('/logout/', 'logout', session.logout)
 
-        app.add_url_rule('/api/student/<id>', 'student',
+        app.add_url_rule('/api/student/<id>/', 'student',
                          api.student, methods=['GET', 'POST', 'PUT'])
 
         app.add_url_rule('/api/teacher/', 'teacher',
