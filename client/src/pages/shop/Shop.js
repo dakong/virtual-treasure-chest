@@ -34,23 +34,25 @@ class Shop extends React.PureComponent {
     }
 
     render() {
-        const { currentStudent, treasureItems, onPurchase, onLogout } = this.props;
+        const { currentStudent, treasureItems, onSelectItem, onLogout } = this.props;
         const groupedItems = groupByCost(treasureItems);
         return (
             <React.Fragment>
                 <button onClick={onLogout}>Logout</button>
                 <Page>
                     <h1>{`Hey ${currentStudent.name}, you currently have ${currentStudent.points} points!`}</h1>
-                    {groupedItems.map(([cost, items]) => (
-                        <React.Fragment>
+                    {groupedItems.map(([cost, items], idx) => (
+                        <React.Fragment key={`group_${idx}`}>
                             <PriceLabel>{`$${cost}`}</PriceLabel>
                             <Container>
-                                {items.map(({id, cost, name, quantity, image_path}) => (
+                                {items.map(({id, cost, description, name, quantity, image_path}) => (
                                     <Card
+
+                                        key={`card_${id}`}
                                         cardActionLabel="Buy"
                                         imageAlt={`${name} image`}
                                         imageSrc={image_path}
-                                        onCardActionClick={() => onPurchase(currentStudent.id, id)}
+                                        onCardActionClick={() => onSelectItem({id, cost, description, name, quantity, image_path})}
                                         showButton={this.canPurchase(cost, quantity)}
                                         subTitlePrimary={`Price: $${cost}`}
                                         subTitleSecondary={`Quantity: ${quantity}`}

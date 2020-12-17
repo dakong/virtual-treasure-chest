@@ -31,14 +31,14 @@ function Welcome({ users }) {
             </section>
             <CardContainer>
                 {users.map(({ name, image, id }) => (
-                    <CardLink 
-                        key={id} 
+                    <CardLink
+                        key={`user_card_link_${id}`}
                         to={`/passcode?id=${id}`}
                         replace={true}
                     >
-                        <UserProfileCard 
-                            clickable 
-                            name={name} 
+                        <UserProfileCard
+                            clickable
+                            name={name}
                             image={image}
                         />
                     </CardLink>

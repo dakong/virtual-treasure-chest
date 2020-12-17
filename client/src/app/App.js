@@ -1,19 +1,23 @@
-import React from "react";
-
+import React from 'react';
+import Modal from 'react-modal';
 import {
   BrowserRouter as Router,
   Switch,
   Route
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import { fetchTreasureItems } from '../services/treasureItem';
 import { fetchStudent } from '../services/student';
 import { purchaseItem } from '../services/treasureItem';
-import { studentLogout } from '../../services/student';
+import { studentLogout } from '../services/student';
 
 import Passcode from '../pages/passcode';
 import Welcome from '../pages/welcome';
 import Shop from '../pages/shop';
+
+import ItemModal from '../components/itemModal';
+
+Modal.setAppElement('#root')
 
 class App extends React.Component {
   constructor(props) {
@@ -24,12 +28,35 @@ class App extends React.Component {
     this.state = {
       students: props.students,
       currentStudent: props.currentStudent,
-      treasureItems: props.treasureItems
+      treasureItems: props.treasureItems,
+      selectedTreasureItem: {},
+      isModalOpen: false,
     }
 
     this.makePurchase = this.makePurchase.bind(this);
     this.fetchShopItemsAndCurrentStudent = this.fetchShopItemsAndCurrentStudent.bind(this);
     this.onLogout = this.onLogout.bind(this);
+
+    this.openPurchaseModal = this.openPurchaseModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  openPurchaseModal(selectedTreasureItem) {
+    document.body.style.overflow = 'hidden';
+
+    this.setState({
+      isModalOpen: true,
+      selectedTreasureItem,
+    })
+  }
+
+  closeModal() {
+    document.body.style.overflow = 'auto';
+
+    this.setState({
+      isModalOpen: false,
+      selectedTreasureItem: {},
+    });
   }
 
   async fetchShopItemsAndCurrentStudent(studentId) {
@@ -48,7 +75,7 @@ class App extends React.Component {
     }
   }
 
-  async makePurchase(studentId, treasureItemId) {
+  async makePurchase(studentId, treasureItemId, onSuccess) {
     try {
       const result = await purchaseItem(studentId, treasureItemId);
       const { status, data } = result;
@@ -70,6 +97,7 @@ class App extends React.Component {
           treasureItems: updatedTreasureItems,
           currentStudent: updatedCurrentStudent
         });
+        onSuccess();
       } else if (status === 'fail') {
         console.log('Purchase item failed ', result);
       }
@@ -78,10 +106,10 @@ class App extends React.Component {
     }
   }
 
-  async onLogout() {
+  async onLogout(history) {
     const result = await studentLogout();
     if (result.status === 'success') {
-        this.props.history.replace('/');
+        history.replace('/');
         // clear session data
         this.setState({
           currentStudent: {},
@@ -95,7 +123,9 @@ class App extends React.Component {
       authenticated,
       students,
       currentStudent,
-      treasureItems
+      treasureItems,
+      isModalOpen,
+      selectedTreasureItem,
     } = this.state;
 
     const ShopWithProps = ({ history }) => {
@@ -104,8 +134,8 @@ class App extends React.Component {
           history={history}
           treasureItems={treasureItems}
           currentStudent={currentStudent}
-          onLogout={this.onLogout}
-          onPurchase={this.makePurchase}
+          onLogout={() => this.onLogout(history)}
+          onSelectItem={this.openPurchaseModal}
         />
       );
     };
@@ -132,6 +162,27 @@ class App extends React.Component {
               </Route>
           </Switch>
         </Router>
+        <Modal
+          isOpen={isModalOpen}
+          contentLabel="Example Modal"
+        >
+          <ItemModal
+            imageAlt={`${selectedTreasureItem.name} image`}
+            imageSrc={selectedTreasureItem.image_path}
+            title={selectedTreasureItem.name}
+            subTitlePrimary={selectedTreasureItem.cost}
+            primaryButtonLabel="Yes"
+            secondaryButtonLabel="No"
+            onPrimaryButtonClick={() => {
+              this.makePurchase(
+                currentStudent.id,
+                selectedTreasureItem.id,
+                this.closeModal,
+              );
+            }}
+            onSecondaryButtonClick={this.closeModal}
+          />
+        </Modal>
       </React.Fragment>
     );
   }

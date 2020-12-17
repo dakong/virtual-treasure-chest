@@ -10,7 +10,7 @@
     const treasure_items = JSON.parse('{{ treasure_items | tojson | safe }}');
 
     ReactDOM.render(
-        React.createElement(VirtualTreasureChest.App, { 
+        React.createElement(VirtualTreasureChest.App, {
             authenticated,
             students,
             currentStudent: current_student,

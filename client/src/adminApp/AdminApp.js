@@ -33,7 +33,7 @@ export default class AdminApp extends React.Component {
             const studentsWithUpdatedPoints = students.map(student => {
                 return student.id === id ? { ...student, points: value } : student;
             });
-            
+
             // make call to students api to update points.
             // Do we want to do a write through?
             this.setState({ students: studentsWithUpdatedPoints })
@@ -49,15 +49,15 @@ export default class AdminApp extends React.Component {
             <PageContainer>
                 <CardContainer>
                     {students.map(({ name, image, id, points }) => (
-                        <UserProfileCard 
-                            editable={true} 
-                            key={id} 
-                            name={name} 
-                            image={image} 
+                        <UserProfileCard
+                            editable={true}
+                            key={`student_${id}`}
+                            name={name}
+                            image={image}
                             points={points}
                             onInputChangedFn={this.onCardInputChanged(id)}
                         />
-                    ))}   
+                    ))}
                 </CardContainer>
             </PageContainer>
         )
