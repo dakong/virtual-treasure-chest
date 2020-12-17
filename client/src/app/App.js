@@ -9,6 +9,7 @@ import {
 import { fetchTreasureItems } from '../services/treasureItem';
 import { fetchStudent } from '../services/student';
 import { purchaseItem } from '../services/treasureItem';
+import { studentLogout } from '../../services/student';
 
 import Passcode from '../pages/passcode';
 import Welcome from '../pages/welcome';
@@ -28,7 +29,7 @@ class App extends React.Component {
 
     this.makePurchase = this.makePurchase.bind(this);
     this.fetchShopItemsAndCurrentStudent = this.fetchShopItemsAndCurrentStudent.bind(this);
-    this.clearSessionData = this.clearSessionData.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
 
   async fetchShopItemsAndCurrentStudent(studentId) {
@@ -69,17 +70,24 @@ class App extends React.Component {
           treasureItems: updatedTreasureItems,
           currentStudent: updatedCurrentStudent
         });
+      } else if (status === 'fail') {
+        console.log('Purchase item failed ', result);
       }
     } catch (e) {
       console.log('an error occurred: ', e);
     }
   }
 
-  clearSessionData() {
-    this.setState({
-      currentStudent: {},
-      treasureItems: []
-    });
+  async onLogout() {
+    const result = await studentLogout();
+    if (result.status === 'success') {
+        this.props.history.replace('/');
+        // clear session data
+        this.setState({
+          currentStudent: {},
+          treasureItems: []
+        });
+    }
   }
 
   render() {
@@ -96,7 +104,7 @@ class App extends React.Component {
           history={history}
           treasureItems={treasureItems}
           currentStudent={currentStudent}
-          onLogout={this.clearSessionData}
+          onLogout={this.onLogout}
           onPurchase={this.makePurchase}
         />
       );
